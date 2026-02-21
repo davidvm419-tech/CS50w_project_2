@@ -1,0 +1,41 @@
+Models
+At least 3 aditional models must be added
+    Auction listing
+    Bids
+    Comments on auction lsitings
+    Add more if you want
+    
+Create listing
+User should visit a page to create a new listing.
+    they should be able to secify a title, a text description, a starting bid.
+    Optionally, provide image URL for the listing.
+
+Active listings Page
+Default route view all active action listings (at least must have title, description, current prince, photo)
+
+Listing Page
+Click a lsiting should take te user to a specific page of that listing and see all the details.
+    If user is signed in, they should be able to add the item to a Watchlist.
+        If item already in Watchlist user should be able to remove it.
+    If the user is signed in, should be able to bid the item,
+        bid must be at least as large as the starting bid,
+        and greater than any other bid placed (if any),
+        if bid is not valid show error to the user.
+    If the user is signed in and is the one who created the listing,
+        user should be able to close the auction, 
+        making the the highest bidder the winner,
+        and making the listing not longer active
+    If a user is signed in on a closed listing page, and the user has won, the page should say so.
+    Users signed in should be able to add comments to the lsiting page,
+        the listing page should show all the comments made on the listing
+    
+Watchlist
+Signed in user should see all their added listings in this page
+    If user clicks the listing take the user to that listing's page
+
+Categories
+Users must be able to visit a page that displays a list of all listing categories. 
+Clicking the category name should take the user to a page that displays all the active listings in that category.
+
+Django Admin Interface
+A site administrator should be able to view, add, edit, and delete any listings, comments and bids made.
