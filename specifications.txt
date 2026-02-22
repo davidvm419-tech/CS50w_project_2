@@ -1,20 +1,20 @@
 Models
-At least 3 aditional models must be added
-    Auction listing
-    Bids
-    Comments on auction lsitings
-    Add more if you want
+At least 3 aditional models must be added (Done)
+    Auction listing (Done)
+    Bids (Done)
+    Comments on auction listings (Done)
+    Add more if you want (Done, added watchlist)
     
 Create listing
 User should visit a page to create a new listing.
-    they should be able to secify a title, a text description, a starting bid.
+    they should be able to specify a title, a text description, a starting bid.
     Optionally, provide image URL for the listing.
 
 Active listings Page
-Default route view all active action listings (at least must have title, description, current prince, photo)
+Default route view all active action listings (at least must have title, description, current price, photo) (Done)
 
 Listing Page
-Click a lsiting should take te user to a specific page of that listing and see all the details.
+Click a listing should take te user to a specific page of that listing and see all the details.
     If user is signed in, they should be able to add the item to a Watchlist.
         If item already in Watchlist user should be able to remove it.
     If the user is signed in, should be able to bid the item,
