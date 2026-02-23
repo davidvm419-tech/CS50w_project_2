@@ -6,9 +6,9 @@ At least 3 aditional models must be added (Done)
     Add more if you want (Done, added watchlist)
     
 Create listing
-User should visit a page to create a new listing.
-    they should be able to specify a title, a text description, a starting bid.
-    Optionally, provide image URL for the listing.
+User should visit a page to create a new listing. (Done)
+    they should be able to specify a title, a text description, a starting bid. (Done)
+    Optionally, provide image URL for the listing. (Done)
 
 Active listings Page
 Default route view all active action listings (at least must have title, description, current price, photo) (Done)
