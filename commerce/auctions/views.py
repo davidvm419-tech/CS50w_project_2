@@ -81,7 +81,7 @@ def newListing(request):
         # Ensure that fields are not empty
         if not title or not category or not description or not initial_bid:
             return render(request, "auctions/newListing.html", {
-                "message": "Invalid creation 1 or more fields were empty."
+                "message": "Invalid creation, 1 or more fields were empty."
             })
 
         # Check if a url is given
