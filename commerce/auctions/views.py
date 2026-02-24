@@ -79,7 +79,7 @@ def newListing(request):
         initial_bid = request.POST["initial_bid"]
 
         # Ensure that fields are not empty
-        if not title or not category or not description or not initial_bid:
+        if not title or not description or not initial_bid:
             return render(request, "auctions/newListing.html", {
                 "message": "Invalid creation, 1 or more fields were empty."
             })
@@ -99,4 +99,18 @@ def newListing(request):
             })
         return HttpResponseRedirect(reverse("index"))
     else:
-        return render(request, "auctions/newListing.html")
+        return render(request, "auctions/newListing.html", {
+            "categories": AuctionListing.CATEGORIES,
+        })
+    
+def categories(request):
+    return render(request, "auctions/categories.html", {
+        "categories": AuctionListing.CATEGORIES,
+    })
+
+def category_page(request, category):
+    selected_category = AuctionListing.objects.filter(category=category)
+    return render(request, "auctions/category_page.html", {
+        "category": category,
+        "listings": selected_category,
+    })

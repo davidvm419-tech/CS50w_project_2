@@ -34,8 +34,8 @@ Signed in user should see all their added listings in this page
     If user clicks the listing take the user to that listing's page
 
 Categories
-Users must be able to visit a page that displays a list of all listing categories. 
-Clicking the category name should take the user to a page that displays all the active listings in that category.
+Users must be able to visit a page that displays a list of all listing categories. (Done)
+Clicking the category name should take the user to a page that displays all the active listings in that category. (Done)
 
 Django Admin Interface
 A site administrator should be able to view, add, edit, and delete any listings, comments and bids made.

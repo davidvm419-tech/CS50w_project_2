@@ -7,8 +7,16 @@ class User(AbstractUser):
 
 
 class AuctionListing(models.Model):
+    # Default categories
+    CATEGORIES = [
+        ("WEAPONS", "Weapons"),
+        ("ARMOR", "Armor"),
+        ("MOUNTS", "Mounts"),
+        ("CONTAINERS", "Containers"),
+    ]
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings"    )
-    category = models.CharField(max_length= 64)
+    category = models.CharField(max_length=25, choices=CATEGORIES, default="WEAPONS")
     title = models.CharField(max_length= 64)
     description = models.TextField()
     starting_bid = models.DecimalField(max_digits=10, decimal_places=2)

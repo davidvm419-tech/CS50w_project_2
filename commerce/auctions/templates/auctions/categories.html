@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %} Auction categories {% endblock %}
+
+{% block body %}
+    <h2>Listing Categories</h2>
+
+    {% if message %}
+    <div>{{ message }}</div>
+    {% endif %}
+    
+    <form action="{% url 'categories' %}" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <ul>
+                {% for value, label in categories%}
+                    <li><a href="{% url 'category_page' value %}">{{ label }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </form>
+{% endblock %}
