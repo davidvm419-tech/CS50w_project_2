@@ -1,0 +1,51 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %} Product {{ product }} {% endblock %}
+
+{% block body %}
+    <h2>Product {{ product }} details</h2>
+
+    {% if messages %}
+        {% for msg in messages %}
+            <div>{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+
+    {% if message %}
+        <div>{{ message }}</div>
+    {% endif %}
+
+    {% for value in item %}
+        {% if value.is_active %}
+            <div class="item_information">
+                <h3>{{ value.title }}</h3>
+                <h4>{{ value.category }}</h4>
+                <p>{{ value.description }}</p>
+                <div class=" images">
+                    <img src="{{ value.image_url }} " alt="image of {{ value.title }}">
+                </div>
+                <div class="prices">
+                    <p>${{ value.current_price }}</p> 
+                </div>
+                <p>{{ value.created_at }}</p>
+                <div class="btn">
+                    {% if user.is_authenticated %}
+                        <form action="{% url 'bid' value.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="number" name="bid" value="{{ value.current_price }}" step="0.1" placeholder="Place your bid"></input>
+                        <button name="bid_value">Add Bid</button>
+                    {% else %}
+                        <form action="{% url 'login' %}">
+                        <button>Log in to start bidding!</button>
+                    {% endif %}
+                    </form>
+                    <button name="watchlist">Add Product to Watchlist</button>
+                    <button name="close_list">Remove Product from list</button>
+                </div>
+            </div>
+        {% endif %}
+    {% empty %}
+            <h2>Not Listing avaliable at the moment.</h2>
+    {% endfor %}
+    
+{% endblock %}

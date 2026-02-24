@@ -6,6 +6,12 @@
 
     <h2>Login</h2>
 
+    {% if messages %}
+        {% for msg in messages %}
+            <div>{{ msg }}</div>
+        {% endfor %}
+    {% endif %}
+
     {% if message %}
         <div>{{ message }}</div>
     {% endif %}

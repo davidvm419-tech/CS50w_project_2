@@ -9,7 +9,6 @@
         {% if item.is_active %}
             <div class="item_information">
                 <h3>{{ item.title }}</h3>
-                <h4>{{ item.category }}</h4>
                 <p>{{ item.description }}</p>
                 <div class=" images">
                     <img src="{{ item.image_url }} " alt="image of {{ item.title }}">
@@ -17,13 +16,10 @@
                 <div class="prices">
                     <p>${{ item.current_price }}</p> 
                 </div>
-                <p>{{ item.created_at }}</p>
-                <div class="btn">
-                    <button name="see">See more!</button>
-                    <button name="bid_value">Add Bid</button>
-                    <button name="watchlist">Add Product to Watchlist</button>
-                    <button name="close_list">Remove Product from list</button>
-                </div>
+                <form action="{% url 'product_details' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button name="details">See more!</button>
+                </form>
             </div>
         {% endif %}
     {% empty %}

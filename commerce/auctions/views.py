@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -17,6 +18,11 @@ def index(request):
 
 
 def login_view(request):
+
+     # Message to user if is not log in and sent to the log in view
+    if request.GET.get("next"):
+        messages.error(request, "You must be logged in.")
+    
     if request.method == "POST":
 
         # Attempt to sign user in
@@ -70,6 +76,7 @@ def register(request):
     else:
         return render(request, "auctions/register.html")
     
+    
 @login_required
 def newListing(request):
     if request.method == "POST":
@@ -103,10 +110,12 @@ def newListing(request):
             "categories": AuctionListing.CATEGORIES,
         })
     
+
 def categories(request):
     return render(request, "auctions/categories.html", {
         "categories": AuctionListing.CATEGORIES,
     })
+
 
 def category_page(request, category):
     selected_category = AuctionListing.objects.filter(category=category)
@@ -114,3 +123,44 @@ def category_page(request, category):
         "category": category,
         "listings": selected_category,
     })
+
+def product_details(request, product_id):
+    selected_product = AuctionListing.objects.get(pk=product_id)   
+    
+    return render(request, "auctions/product_details.html", {
+        "product": selected_product.title,
+        "item": [selected_product],    
+    })
+
+@login_required
+def bid(request, product_id):
+    bid = request.POST["bid"]
+    product = AuctionListing.objects.get(pk=product_id)
+    
+    # Check the input is valid
+    try:
+        bid = float(bid)
+    except (TypeError, ValueError):
+        return render(request, "auctions/product_details.html", {
+            "message": "Invalid bid value, bid must be a number.",
+            "product": product.title,
+            "item": [product]
+        })
+    
+    # Check that bid is valid 
+    if bid <= product.current_price:
+        return render(request, "auctions/product_details.html", {
+            "message": "Invalid bid value, bid must be greater than the current price.",
+            "product": product.title,
+            "item": [product]
+        })
+    else:
+        # Create bid entry
+        bid_creation = Bid.objects.create(bidder=request.user, 
+                                            product=product, bid_amount=bid)
+        
+        # Update product price and redirect to product view
+        product.current_price = bid
+        product.save()
+        messages.success(request,"Bid added successfully!")
+        return HttpResponseRedirect(reverse("product_details", args=[product_id]))

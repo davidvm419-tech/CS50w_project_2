@@ -14,13 +14,13 @@ Active listings Page
 Default route view all active action listings (at least must have title, description, current price, photo) (Done)
 
 Listing Page
-Click a listing should take te user to a specific page of that listing and see all the details.
+Click a listing should take te user to a specific page of that listing and see all the details. (Done)
     If user is signed in, they should be able to add the item to a Watchlist.
         If item already in Watchlist user should be able to remove it.
-    If the user is signed in, should be able to bid the item,
-        bid must be at least as large as the starting bid,
-        and greater than any other bid placed (if any),
-        if bid is not valid show error to the user.
+    If the user is signed in, should be able to bid the item, (Done)
+        bid must be at least as large as the starting bid, (Done)
+        and greater than any other bid placed (if any), (Done)
+        if bid is not valid show error to the user. (Done)
     If the user is signed in and is the one who created the listing,
         user should be able to close the auction, 
         making the the highest bidder the winner,
