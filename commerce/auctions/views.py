@@ -216,3 +216,19 @@ def closing_auction(request, product_id):
         messages.success(request, "Auction closed with no highest bid!")   
     
     return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+
+def watchlist(request):
+    # Get user watchlist
+    user_watchlist = WatchList.objects.filter(user=request.user)
+    # List comprehension to loop over the user watchlist
+    products = [item.product for item in user_watchlist]
+    return render(request, "auctions/watchlist.html", {
+        "products": products,
+    })
+
+
+def add_to_watchlist(request, product_id):
+    ...
+    # Get user request
+    # Check if product already in watchlist
+    # return to listing page

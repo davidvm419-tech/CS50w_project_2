@@ -30,8 +30,8 @@ Click a listing should take te user to a specific page of that listing and see a
         the listing page should show all the comments made on the listing (Done)
     
 Watchlist
-Signed in user should see all their added listings in this page
-    If user clicks the listing take the user to that listing's complete page
+Signed in user should see all their added listings in this page (Done)
+    If user clicks the listing take the user to that listing's complete page (Done)
 
 Categories
 Users must be able to visit a page that displays a list of all listing categories. (Done)
