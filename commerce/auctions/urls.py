@@ -19,4 +19,6 @@ urlpatterns = [
     # Listing urls
     path("listing/<int:product_id>", views.product_details, name="product_details"),
     path("listing/<int:product_id>/bid", views.bid, name="bid"),
+    path("listing/<int:product_id>/comments", views.comments, name="comments"),
+    path("listing/<int:product_id>/closing_auction", views.closing_auction, name="closing_auction"),
 ]

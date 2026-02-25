@@ -21,13 +21,13 @@ Click a listing should take te user to a specific page of that listing and see a
         bid must be at least as large as the starting bid, (Done)
         and greater than any other bid placed (if any), (Done)
         if bid is not valid show error to the user. (Done)
-    If the user is signed in and is the one who created the listing,
-        user should be able to close the auction, 
-        making the the highest bidder the winner,
-        and making the listing not longer active
-    If a user is signed in on a closed listing page, and the user has won, the page should say so.
-    Users signed in should be able to add comments to the lsiting page,
-        the listing page should show all the comments made on the listing
+    If the user is signed in and is the one who created the listing, (Done)
+        user should be able to close the auction, (Done) 
+        making the the highest bidder the winner, (Done)
+        and making the listing not longer active (Done)
+    If a user is signed in on a closed listing page, and the user has won, the page should say so. (Done)
+    Users signed in should be able to add comments to the listing page, (Done)
+        the listing page should show all the comments made on the listing (Done)
     
 Watchlist
 Signed in user should see all their added listings in this page

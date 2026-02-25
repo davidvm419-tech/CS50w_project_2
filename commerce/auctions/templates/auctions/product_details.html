@@ -15,9 +15,30 @@
         <div>{{ message }}</div>
     {% endif %}
 
+    <div class="section">
     {% for value in item %}
-        {% if value.is_active %}
             <div class="item_information">
+                {% if value.is_active %}
+                    <span>Listing Open!</span>
+                {% else %}
+                    <span>Listing Closed!</span>
+                    {% if value.winner%}
+                        <span>Winner: {{ value.winner.username }}</span>
+                        {% if user == value.winner %}
+                                <span>You Won this auction!</span>
+                        {% endif %}  
+                    {% else %}
+                        <span>Listing closed with no highest bidder.</span>
+                    {% endif %}
+                {% endif %}
+
+                {% if user == value.owner %}
+                    <form action="{% url 'closing_auction' value.id %}" method="post">
+                        {% csrf_token %}
+                        <button name="close">Close Listing</button>
+                    </form>
+                {% endif %}
+
                 <h3>{{ value.title }}</h3>
                 <h4>{{ value.category }}</h4>
                 <p>{{ value.description }}</p>
@@ -27,25 +48,59 @@
                 <div class="prices">
                     <p>${{ value.current_price }}</p> 
                 </div>
-                <p>{{ value.created_at }}</p>
+                <small>{{ value.created_at }}</small>
                 <div class="btn">
+
+                    {% if value.is_active %}
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'bid' value.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="number" name="bid" value="{{ value.current_price }}" step="0.1" placeholder="Place your bid"></input>
+                                <button>Add Bid</button>
+                            </form>
+                        {% else %}
+                            <form action="{% url 'login' %}">
+                            <button>Log in to start bidding!</button>
+                            </form>
+                        {% endif %}
+                    {% else %}
+                        <button disabled>Listing for this product is Closed</button>
+                    {% endif %}
+
                     {% if user.is_authenticated %}
-                        <form action="{% url 'bid' value.id %}" method="post">
-                        {% csrf_token %}
-                        <input type="number" name="bid" value="{{ value.current_price }}" step="0.1" placeholder="Place your bid"></input>
-                        <button name="bid_value">Add Bid</button>
+                        <form action="{% url 'comments' value.id %}" method="post">
+                            {% csrf_token %}
+                            <textarea name="comment" placeholder="add a comment"></textarea>
+                            <button>Add Comment</button>
+                        </form>
                     {% else %}
                         <form action="{% url 'login' %}">
-                        <button>Log in to start bidding!</button>
-                    {% endif %}
-                    </form>
+                        <button>Log in to add a comment</button>
+                        </form>
+                    {% endif %}  
+
+                </div>
+                <div class="comments">
+                    <h3>Comments</h3>
+                    {% for comment in value.comments.all %}
+                        <div class="comment">
+                            <strong>{{ comment.author.username }}</strong>
+                            <p>{{comment.comment}}</p>
+                            <small>{{ comment.created_at}}</small>
+                        </div>
+                    {% empty %}
+                        <p>No comments yet. Be the first one!</p>
+                    {% endfor %}
+
+                </div>
+                <div class="watchlist">
                     <button name="watchlist">Add Product to Watchlist</button>
-                    <button name="close_list">Remove Product from list</button>
+                    <button name="close_list">Remove Product from Watchlist</button>
                 </div>
             </div>
-        {% endif %}
+
     {% empty %}
             <h2>Not Listing avaliable at the moment.</h2>
     {% endfor %}
-    
+    </div>
 {% endblock %}

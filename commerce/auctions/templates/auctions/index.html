@@ -6,8 +6,12 @@
     <h2>Active Listings</h2>
 
     {% for item in auction_list %}
-        {% if item.is_active %}
             <div class="item_information">
+                {% if item.is_active %}
+                    <span>Listing Open!</span>
+                {% else %}
+                    <span>Listing Closed!</span>
+                {% endif %}
                 <h3>{{ item.title }}</h3>
                 <p>{{ item.description }}</p>
                 <div class=" images">
@@ -21,7 +25,6 @@
                     <button name="details">See more!</button>
                 </form>
             </div>
-        {% endif %}
     {% empty %}
             <h2>Not Listing avaliable at the moment.</h2>
     {% endfor %}

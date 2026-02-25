@@ -154,13 +154,65 @@ def bid(request, product_id):
             "product": product.title,
             "item": [product]
         })
-    else:
-        # Create bid entry
-        bid_creation = Bid.objects.create(bidder=request.user, 
-                                            product=product, bid_amount=bid)
-        
-        # Update product price and redirect to product view
-        product.current_price = bid
-        product.save()
-        messages.success(request,"Bid added successfully!")
+    
+    # Check that owner can't bid his own product
+    if request.user == product.owner:
+        messages.error(request, "You cannot bid on your own listing.")
         return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+ 
+
+    # Create bid entry
+    bid_creation = Bid.objects.create(bidder=request.user, 
+                    product=product, bid_amount=bid)
+    
+    # Update product price and redirect to product view
+    product.current_price = bid
+    product.save()
+    messages.success(request,"Bid added successfully!")
+    return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+    
+@login_required
+def comments(request, product_id):
+    comment = request.POST["comment"].strip()
+    product = AuctionListing.objects.get(pk=product_id)
+
+    # Check to avoid blank comments
+    if not comment:
+        return render(request, "auctions/product_details.html", {
+            "message": "Comment field empty, please leave a comment.",
+            "product": product.title,
+            "item": [product]
+        })
+    
+    # Create comment entry
+    entry = AuctionComment.objects.create(author=request.user, product=product, comment=comment)
+    messages.success(request, "Comment added successfully!")   
+    return HttpResponseRedirect(reverse("product_details", args=[product_id])) 
+
+@login_required
+def closing_auction(request, product_id):
+    product = AuctionListing.objects.get(pk=product_id)
+
+    # Check if user owns the listing
+    if request.user != product.owner:
+        messages.error(request, "Invaid user, you don't own this listing!")
+        return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+
+    # Check if listing is already closed
+    if not product.is_active:
+        messages.error(request, "Listing already closed!")
+        return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+    else:
+        product.is_active = False    
+
+    # Make the highest bidder the winer and redirect to product page
+    highest_bid = product.bids.order_by("-bid_amount").first()
+    if highest_bid:
+        product.winner = highest_bid.bidder
+        product.save()
+        messages.success(request, "Auction closed successfully!")    
+    else:
+        product.save()
+        messages.success(request, "Auction closed with no highest bid!")   
+    
+    return HttpResponseRedirect(reverse("product_details", args=[product_id]))

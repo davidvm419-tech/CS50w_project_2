@@ -24,6 +24,11 @@ class AuctionListing(models.Model):
     current_price = models.DecimalField(max_digits=10, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    winner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="wins")
+
+    # Order listings by newest creation date
+    class Meta:
+        ordering = ["-created_at"]
 
 
 class Bid(models.Model):
@@ -38,6 +43,10 @@ class AuctionComment(models.Model):
     product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="comments")
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+
+    # Order comments by newest creation date
+    class Meta:
+        ordering = ["-created_at"]
     
 
 class WatchList(models.Model):
