@@ -31,7 +31,7 @@ Click a listing should take te user to a specific page of that listing and see a
     
 Watchlist
 Signed in user should see all their added listings in this page
-    If user clicks the listing take the user to that listing's page
+    If user clicks the listing take the user to that listing's complete page
 
 Categories
 Users must be able to visit a page that displays a list of all listing categories. (Done)
