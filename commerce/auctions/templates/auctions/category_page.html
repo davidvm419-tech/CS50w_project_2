@@ -20,8 +20,7 @@
                 <div class="prices">
                     <p>${{ item.current_price }}</p> 
                 </div>
-                <form action="{% url 'product_details' item.id %}" method="post">
-                    {% csrf_token %}
+                <form action="{% url 'product_details' item.id %}">
                     <button name="details">See more!</button>
                 </form>
             </div>

@@ -11,12 +11,12 @@ User should visit a page to create a new listing. (Done)
     Optionally, provide image URL for the listing. (Done)
 
 Active listings Page
-Default route view all active action listings (at least must have title, description, current price, photo) (Done)
+Default route view all active auction listings (at least must have title, description, current price, photo) (Done)
 
 Listing Page
 Click a listing should take te user to a specific page of that listing and see all the details. (Done)
-    If user is signed in, they should be able to add the item to a Watchlist.
-        If item already in Watchlist user should be able to remove it.
+    If user is signed in, they should be able to add the item to a Watchlist. (Done)
+        If item already in Watchlist user should be able to remove it. (done)
     If the user is signed in, should be able to bid the item, (Done)
         bid must be at least as large as the starting bid, (Done)
         and greater than any other bid placed (if any), (Done)

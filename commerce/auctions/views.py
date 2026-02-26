@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import get_list_or_404, get_object_or_404, render
 from django.urls import reverse
 
 
@@ -11,7 +11,7 @@ from .models import AuctionListing, AuctionComment, Bid, User, WatchList
 
 
 def index(request):
-    auction_list = AuctionListing.objects.all()
+    auction_list = AuctionListing.objects.filter(is_active=True)
     return render(request, "auctions/index.html", {
         "auction_list": auction_list,
     })
@@ -98,7 +98,7 @@ def newListing(request):
         
         # Attempt to create listing
         try:
-            listing = AuctionListing.objects.create(owner=request.user, category=category, 
+            AuctionListing.objects.create(owner=request.user, category=category, 
                     title=title, description=description, starting_bid=initial_bid, image_url=image_url, current_price=initial_bid)
         except IntegrityError:
             return render(request, "auctions/newListing.html", {
@@ -118,19 +118,36 @@ def categories(request):
 
 
 def category_page(request, category):
+
+    # Send the user to an error page in case that the category desn't exist
+    selected_category = get_list_or_404(AuctionListing, category=category)
+
     selected_category = AuctionListing.objects.filter(category=category)
+
     return render(request, "auctions/category_page.html", {
         "category": category,
         "listings": selected_category,
     })
 
-def product_details(request, product_id):
-    selected_product = AuctionListing.objects.get(pk=product_id)   
-    
+
+def product_details(request, product_id):  
+
+    # Send user to an error page in case the id doesn't exists 
+    selected_product = get_object_or_404(AuctionListing, pk=product_id)
+
+    # Check if user is log in
+    if request.user.is_authenticated:
+        # Check if product is in user watchlist to render the correct button and to avoid errors if user is not log in
+        in_watchlist = WatchList.objects.filter(user=request.user, product=selected_product).exists()
+    else:
+        in_watchlist = False
+
     return render(request, "auctions/product_details.html", {
         "product": selected_product.title,
-        "item": [selected_product],    
+        "item": [selected_product],  
+        "in_watchlist": in_watchlist,      
     })
+
 
 @login_required
 def bid(request, product_id):
@@ -162,8 +179,7 @@ def bid(request, product_id):
  
 
     # Create bid entry
-    bid_creation = Bid.objects.create(bidder=request.user, 
-                    product=product, bid_amount=bid)
+    Bid.objects.create(bidder=request.user, product=product, bid_amount=bid)
     
     # Update product price and redirect to product view
     product.current_price = bid
@@ -226,9 +242,34 @@ def watchlist(request):
         "products": products,
     })
 
-
+@login_required
 def add_to_watchlist(request, product_id):
-    ...
-    # Get user request
+    product = AuctionListing.objects.get(pk=product_id)
+    # Get the product from the watchlist
+    product_in_whatchlist = WatchList.objects.filter(user=request.user, product=product).exists()
+    
     # Check if product already in watchlist
-    # return to listing page
+    if product_in_whatchlist:
+        messages.error(request, "Product already added to your watchlist!")
+
+    else:
+        WatchList.objects.create(user=request.user, product=product)
+        messages.success(request, "Product added to your watchlist!")
+    
+    return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+
+
+@login_required
+def delete_from_watchlist(request, product_id):
+    product = AuctionListing.objects.get(pk=product_id)
+    product_to_delete = WatchList.objects.filter(user=request.user, product=product).exists()
+
+    # Check if product in watchlist
+    if product_to_delete:
+        WatchList.objects.filter(user=request.user, product=product).delete()
+        messages.success(request, "Product successfully deleted from your watchlist!")
+    else:
+        messages.error(request, "Something went wrong, we can't find the product. Check that product is in your wathlist and try again.")
+    
+    return HttpResponseRedirect(reverse("product_details", args=[product_id]))
+  

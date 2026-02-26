@@ -5,13 +5,10 @@
 {% block body %}
     <h2>Active Listings</h2>
 
+    <div class="cards">
     {% for item in auction_list %}
             <div class="item_information">
-                {% if item.is_active %}
-                    <span>Listing Open!</span>
-                {% else %}
-                    <span>Listing Closed!</span>
-                {% endif %}
+
                 <h3>{{ item.title }}</h3>
                 <p>{{ item.description }}</p>
                 <div class=" images">
@@ -20,13 +17,13 @@
                 <div class="prices">
                     <p>${{ item.current_price }}</p> 
                 </div>
-                <form action="{% url 'product_details' item.id %}" method="POST">
-                    {% csrf_token %}
+                <form action="{% url 'product_details' item.id %}">
                     <button name="details">See more!</button>
                 </form>
             </div>
     {% empty %}
             <h2>Not Listing avaliable at the moment.</h2>
     {% endfor %}
+    </div>
     
 {% endblock %}

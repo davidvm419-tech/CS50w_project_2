@@ -52,9 +52,11 @@ class AuctionComment(models.Model):
 class WatchList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="watchlist")
     product = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, related_name="watchlist_by")
-
+    created_at = models.DateTimeField(auto_now_add=True)
+    
     # Constrain user to only add the same product once to the watchlist avoiding not necessary duplicates
     class Meta:
         # This is the correct name variable
         unique_together = ("user", "product")
+        ordering = ["-created_at"]
         
