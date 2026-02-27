@@ -8,12 +8,16 @@
 
     {% if messages %}
         {% for msg in messages %}
-            <div>{{ msg }}</div>
+            <div class="alert alert-primary" role="alert" style="text-align: center;">
+                {{ msg }}
+            </div>
         {% endfor %}
     {% endif %}
 
     {% if message %}
-        <div>{{ message }}</div>
+        <div class="alert alert-primary" role="alert" style="text-align: center;">
+            {{ message }}
+        </div>
     {% endif %}
 
     <form action="{% url 'login' %}" method="post">

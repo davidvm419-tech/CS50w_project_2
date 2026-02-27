@@ -2,8 +2,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import get_list_or_404, get_object_or_404, render
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 
@@ -61,6 +61,13 @@ def register(request):
             return render(request, "auctions/register.html", {
                 "message": "Passwords must match."
             })
+        
+        # Ensure that fields are not empty
+        if not username or not password:
+            return render(request, "auctions/register.html", {
+                "message": "Username or password fields were empty."
+            })
+    
 
         # Attempt to create new user
         try:
@@ -88,7 +95,8 @@ def newListing(request):
         # Ensure that fields are not empty
         if not title or not description or not initial_bid:
             return render(request, "auctions/newListing.html", {
-                "message": "Invalid creation, 1 or more fields were empty."
+                "message": "Invalid creation, 1 or more fields were empty.",
+                "categories": AuctionListing.CATEGORIES,
             })
 
         # Check if a url is given
@@ -102,7 +110,8 @@ def newListing(request):
                     title=title, description=description, starting_bid=initial_bid, image_url=image_url, current_price=initial_bid)
         except IntegrityError:
             return render(request, "auctions/newListing.html", {
-                "message": "Error creating the listing, try again in a few minutes."
+                "message": "Error creating the listing, try again in a few minutes.",
+                "categories": AuctionListing.CATEGORIES,
             })
         return HttpResponseRedirect(reverse("index"))
     else:
@@ -120,9 +129,11 @@ def categories(request):
 def category_page(request, category):
 
     # Send the user to an error page in case that the category desn't exist
-    selected_category = get_list_or_404(AuctionListing, category=category)
+    categories = [c[0] for c in AuctionListing.CATEGORIES]
+    if category not in categories:
+        raise Http404("Category does not exist")
 
-    selected_category = AuctionListing.objects.filter(category=category)
+    selected_category = AuctionListing.objects.filter(category=category, is_active=True)
 
     return render(request, "auctions/category_page.html", {
         "category": category,

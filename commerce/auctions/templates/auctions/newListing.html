@@ -6,7 +6,9 @@
     <h2>Create a New Listing</h2>
 
     {% if message %}
-    <div>{{ message }}</div>
+        <div class="alert alert-primary" role="alert" style="text-align: center;">
+            {{ message }}
+        </div>
     {% endif %}
     
     <form action="{% url 'newListing' %}" method="post">
@@ -15,7 +17,7 @@
             <input class="form-control" autofocus type="text" type="text" name="title" placeholder="Listing title">
         </div>
         <div class="form-group">
-            <label for="category">Category</label>
+            <label for="category">Select Category</label>
             <select class="form" name="category">
                 {% for value, label in categories%}
                     <option value="{{ value }}">{{ label }}</option>
