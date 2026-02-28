@@ -4,8 +4,8 @@
 
 {% block body %}
 
-    {% for item in listings %}
     <h2>Active Listings for {{ category }}</h2>
+    {% for item in listings %}
         <div class="auction-cards">
             <div class="card-info">
                 <h3>{{ item.title }}</h3>
